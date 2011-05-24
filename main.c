@@ -13,7 +13,7 @@ int main() {
 
     /* translate texts */
     char *morse_texts[2];
-    for(uint8_t i=0;i<text_count;i++) {
+    for(uint8_t i=0;i<2;i++) {
         morse_texts[i] = create_morse_array(texts[i]);
     }
 

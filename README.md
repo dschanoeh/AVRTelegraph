@@ -21,7 +21,8 @@ The symbols, the symbol timings of the morse code and the transfer speed are con
     /* length of symbols (in time quanta) */
     #define TIME_DOT 1
     #define TIME_DASH 3
-    #define TIME_PAUSE 1
+    #define TIME_CHARACTER_PAUSE 3
+    #define TIME_SYMBOL_PAUSE 1
     #define TIME_WORD_PAUSE 7
 
     #define ON 1
@@ -39,7 +40,7 @@ The symbols, the symbol timings of the morse code and the transfer speed are con
 
     /* translate texts */
     char *morse_texts[2];
-    for(uint8_t i=0;i<text_count;i++) {
+    for(uint8_t i=0;i<2;i++) {
         morse_texts[i] = create_morse_array(texts[i]);
     }
 

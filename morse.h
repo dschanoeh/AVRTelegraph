@@ -9,7 +9,8 @@
 /* length of symbols (in time quanta) */
 #define TIME_DOT 1
 #define TIME_DASH 3
-#define TIME_PAUSE 1
+#define TIME_CHARACTER_PAUSE 3
+#define TIME_SYMBOL_PAUSE 1
 #define TIME_WORD_PAUSE 7
 
 #define ON 1

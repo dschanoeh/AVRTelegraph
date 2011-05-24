@@ -82,7 +82,7 @@ char* create_morse_array(char *string) {
         uint8_t j=0;
         for(;symbols[c][j] != '\0';j++);
 
-        length += j;
+        length += j + 1; /* add character and character pause */
     }
 
     /* allocate morse string */
@@ -105,6 +105,9 @@ char* create_morse_array(char *string) {
             morse_string[string_pos] = symbols[c][j];
             string_pos++;
         }
+
+        morse_string[string_pos] = 'p';
+        string_pos++;
     }
 
     return morse_string;
@@ -141,18 +144,22 @@ void morse(char** strings, uint8_t string_count) {
                 switch(c) {
                     case 's':
                         set_pin(i, ON);
-                        countdown[i] = TIME_DOT+TIME_PAUSE;
+                        countdown[i] = TIME_DOT+TIME_SYMBOL_PAUSE;
                         break;
                     case 'l':
                         set_pin(i, ON);
-                        countdown[i] = TIME_DASH+TIME_PAUSE;
+                        countdown[i] = TIME_DASH+TIME_SYMBOL_PAUSE;
+                        break;
+                    case 'p':
+                        set_pin(i, OFF);
+                        countdown[i] = TIME_CHARACTER_PAUSE;
                         break;
                     case 'w':
                         set_pin(i, OFF);
                         countdown[i] = TIME_WORD_PAUSE;
                         break;
                 }
-            } else if(countdown[i] == TIME_PAUSE) { /* every symbol is followed by a short pause */
+            } else if(countdown[i] == TIME_SYMBOL_PAUSE) { /* every symbol is followed by a short pause */
                 set_pin(i, OFF);
             }
 
