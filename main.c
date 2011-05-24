@@ -7,18 +7,17 @@
 int main() {
     init();
 
-    uint8_t text_count = 2;
-    char* texts[text_count];
-    texts[0] = "abc abc";
-    texts[1] = "sos ";
+    char* texts[2];
+    texts[0] = "attack at midnight";
+    texts[1] = "sos we are sinking";
 
-    char *morse_texts[text_count];
-
+    /* translate texts */
+    char *morse_texts[2];
     for(uint8_t i=0;i<text_count;i++) {
         morse_texts[i] = create_morse_array(texts[i]);
     }
 
-    morse(morse_texts, text_count);
+    /* send morse code */
+    morse(morse_texts, 2);
 }
-
 

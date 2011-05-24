@@ -1,6 +1,8 @@
 #include <stdint.h>
 
+/* speed of the CPU */
 #define F_CPU 16000000
+
 /* time quanta of symbols in ms */
 #define TIME_QUANTA 100
 
@@ -13,6 +15,7 @@
 #define ON 1
 #define OFF 0
 
+/* PORT and DDR on which morse code is sent */
 #define MORSE_PORT PORTD
 #define MORSE_DDR DDRD
 

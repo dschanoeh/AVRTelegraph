@@ -5,11 +5,18 @@
 #include <stdlib.h>
 
 /*
+ * symbol translation table
  * s == dot
  * l == dash
  * w == word pause
+ *
+ * 0..25 characters
+ * 26 space
+ * 27..36 numbers
  */
 char* symbols[27];
+
+/* initialize morse port and fill symbol table */
 void init() {
     MORSE_DDR = 0xFF;
     MORSE_PORT = 0x00;
@@ -43,7 +50,6 @@ void init() {
 
     symbols[26] = "w";
 
-
     symbols[27] = "lllll";
     symbols[28] = "sllll";
     symbols[29] = "sslll";
@@ -56,6 +62,7 @@ void init() {
     symbols[36] = "lllls";
 }
 
+/* translate a plaintext array into morse symbols */
 char* create_morse_array(char *string) {
     uint16_t length=0;
 
@@ -76,9 +83,9 @@ char* create_morse_array(char *string) {
         for(;symbols[c][j] != '\0';j++);
 
         length += j;
-
     }
 
+    /* allocate morse string */
     char* morse_string = malloc((sizeof(char) * length)+1);
     morse_string[length] = '\0';
     uint8_t string_pos = 0;
@@ -93,7 +100,6 @@ char* create_morse_array(char *string) {
             c = c - '0' + 27;
         }
 
-
         /* add symbols of character */
         for(int j=0;symbols[c][j] != '\0';j++) {
             morse_string[string_pos] = symbols[c][j];
@@ -104,10 +110,14 @@ char* create_morse_array(char *string) {
     return morse_string;
 }
 
+/*
+ * morse an array of strings on MORSE_PORT. up to 8
+ * strings are supported
+ */
 void morse(char** strings, uint8_t string_count) {
 
-    uint16_t *positions = malloc(sizeof(uint16_t) * string_count);
-    uint8_t *countdown = malloc(sizeof(uint8_t) * string_count);
+    uint16_t *positions = malloc(sizeof(uint16_t) * string_count); /* position in string */
+    uint8_t *countdown = malloc(sizeof(uint8_t) * string_count); /* position in symbol */
 
     for(uint8_t j=0;j<string_count;j++) {
         positions[j] = 0;
@@ -116,9 +126,9 @@ void morse(char** strings, uint8_t string_count) {
 
     while(1) {
 
-        for(uint8_t i=0;i<string_count;i++) {
+        for(uint8_t i=0;i<string_count;i++) { /* loop through strings */
 
-            if(countdown[i] == 0) {
+            if(countdown[i] == 0) { /* if the end of the symbol is reached get a new symbol */
                 char c = strings[i][positions[i]];
                 positions[i]++;
 
@@ -142,17 +152,18 @@ void morse(char** strings, uint8_t string_count) {
                         countdown[i] = TIME_WORD_PAUSE;
                         break;
                 }
-            } else if(countdown[i] == TIME_PAUSE) {
+            } else if(countdown[i] == TIME_PAUSE) { /* every symbol is followed by a short pause */
                 set_pin(i, OFF);
             }
 
             countdown[i]--;
 
         }
-        _delay_ms(TIME_QUANTA);
+        _delay_ms(TIME_QUANTA); /* sleep for TIME_QUANTA in every step */
     }
 }
 
+/* set pin ON or OFF */
 void set_pin(uint8_t pin, uint8_t val) {
     if(val == ON)
         MORSE_PORT |= 1<<pin;
