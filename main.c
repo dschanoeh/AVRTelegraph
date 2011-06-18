@@ -8,8 +8,8 @@ int main() {
     init();
 
     char* texts[2];
-    texts[0] = "explosion zwischen see und gebirge";
-    texts[1] = "explosion zwischen baum und gebirge";
+    texts[0] = "explosion zwischen see und gebirge     "; // daisy town
+    texts[1] = "explosion zwischen baum und gebirge     "; // new austin
 
     /* translate texts */
     char *morse_texts[2];
